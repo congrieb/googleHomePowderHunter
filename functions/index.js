@@ -24,7 +24,7 @@ exports.sillyNameMaker = functions.https.onRequest((request, response) => {
     var result;
     let resort_name = app.getArgument('resort_name');
     snow.parseResort(resort_name, 'mid', function(result){
-        var snowAmount = result.forecast[3].snow;
+        var snowAmount = result.forecast[0].snow;
         app.tell('Looks like ' + result.name + ' got ' + snowAmount + ' inches of snow today');
     });
   }
