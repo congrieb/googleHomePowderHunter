@@ -25,7 +25,7 @@ exports.PowderHunter = functions.https.onRequest((request, response) => {
     snow.parseResort(resort_name, 'mid', function(result){
         var indexOfDate = dateHelper.getDaysFromToday(day_specified);
         var snowAmount = result.forecast[indexOfDate].snow;
-        app.tell('Looks like ' + result.name + ' got ' + snowAmount + ' inches of snow ' + responseHelper.getDayPhrase(indexOfDate));
+        app.tell('Looks like there will be ' + snowAmount + ' inches of snow at ' + result.name + ' ' + responseHelper.getDayPhrase(indexOfDate));
     });
   }
   // d. build an action map, which maps intent names to functions
