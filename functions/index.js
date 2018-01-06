@@ -3,6 +3,8 @@
 process.env.DEBUG = 'actions-on-google:*';
 const App = require('actions-on-google').DialogflowApp;
 const functions = require('firebase-functions');
+const DateHelper = require('./lib/dateHelper');
+const ResponseHelper = require('./lib/responseHelper');
 
 
 exports.PowderHunter = functions.https.onRequest((request, response) => {
@@ -14,11 +16,16 @@ exports.PowderHunter = functions.https.onRequest((request, response) => {
 // c. The function that generates the silly name
   function singleResort (app) {
     var snow = require('snow-forecast-sfr');
+    var dateHelper = new DateHelper();
+    var responseHelper = new ResponseHelper();
     var result;
     let resort_name = app.getArgument('resort_name');
+    let day_specified = app.getArgument('date') || new Date();
+    day_specified = new Date(day_specified);
     snow.parseResort(resort_name, 'mid', function(result){
-        var snowAmount = result.forecast[0].snow;
-        app.tell('Looks like ' + result.name + ' got ' + snowAmount + ' inches of snow today');
+        var indexOfDate = dateHelper.getDaysFromToday(day_specified);
+        var snowAmount = result.forecast[indexOfDate].snow;
+        app.tell('Looks like ' + result.name + ' got ' + snowAmount + ' inches of snow ' + responseHelper.getDayPhrase(indexOfDate));
     });
   }
   // d. build an action map, which maps intent names to functions
