@@ -10,4 +10,15 @@ DateHelper.prototype.getDaysFromToday = function(dateIn) {
     return Math.floor(mSecondDiff / this.mSecondPerDay);
 };
 
+DateHelper.prototype.convertDateRange = function(rangeIn) {
+    var splitDates = rangeIn.split('/');
+    var startDate = splitDates[0];
+    var endDate = splitDates[1];
+    startDate = new Date(startDate);
+    startDate = new Date( startDate.getTime() + (startDate.getTimezoneOffset() * 60000));
+    endDate = new Date(endDate);
+    endDate = new Date( endDate.getTime() + (endDate.getTimezoneOffset() * 60000));
+    return {startDate: startDate, endDate: endDate};
+};
+
 module.exports = DateHelper;
