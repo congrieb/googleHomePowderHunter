@@ -52,4 +52,15 @@ describe('DateHelper', function dateHelperTests(){
             expect(result.endDate).toEqual(expectedEnd);
         });
     });
+
+    describe('convertDateToDateRange', function test(){
+        it('should return the given date formatted as a date range "inputDate/inputDate', function test(){
+            var input = '01-21-2018';
+            var expectedResult = '01-21-2018/01-21-2018'
+
+            var result = dateHelper.convertDateToDateRange(input);
+
+            expect(result).toEqual(expectedResult);
+        })
+    })
 });

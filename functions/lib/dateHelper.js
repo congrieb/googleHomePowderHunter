@@ -21,4 +21,8 @@ DateHelper.prototype.convertDateRange = function(rangeIn) {
     return {startDate: startDate, endDate: endDate};
 };
 
+DateHelper.prototype.convertDateToDateRange = function(dateIn) {
+    return dateIn.toString() + '/' + dateIn.toString();
+}
+
 module.exports = DateHelper;
