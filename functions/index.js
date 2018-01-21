@@ -21,7 +21,7 @@ exports.PowderHunter = functions.https.onRequest((request, response) => {
     let resort_name = app.getArgument('resort_name');
     let day_specific = app.getArgument('date');
     let date_range = app.getArgument('date-period');
-    // If we don't get any date. Assume we are talking about today
+    // If we don't get any date or date range. Assume we are talking about today
     if(!day_specific && !date_range) {
       day_specific = new Date();
     }
@@ -41,10 +41,15 @@ exports.PowderHunter = functions.https.onRequest((request, response) => {
       app.tell('Looks like there will be ' + snowAmount + ' inches of snow at ' + result.name + ' ' + (request.body.result.contexts[0].parameters['date-period.original'] || responseHelper.getDayPhrase(indexOfStart)));
     });
   }
-  
+
+  function nextBigSnow (app) {
+    app.tell('Im not quite ready for that one');
+  }
+
   // d. build an action map, which maps intent names to functions
   let actionMap = new Map();
   actionMap.set('single_resort', singleResort);
+  actionMap.set('next_big_snow', nextBigSnow);
 
 
 app.handleRequest(actionMap);
