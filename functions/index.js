@@ -5,6 +5,7 @@ const App = require('actions-on-google').DialogflowApp;
 const functions = require('firebase-functions');
 const DateHelper = require('./lib/dateHelper');
 const ResponseHelper = require('./lib/responseHelper');
+const ReportParseHelper = require('./lib/reportParseHelper');
 
 
 exports.PowderHunter = functions.https.onRequest((request, response) => {
@@ -29,7 +30,7 @@ exports.PowderHunter = functions.https.onRequest((request, response) => {
     if(day_specific) {
       date_range = dateHelper.convertDateToDateRange(day_specific);
     }
-    snow.parseResort(resort_name, 'mid', function(result){
+    snow.parseResort(resort_name, 'top', function(result){
       var dateRange = dateHelper.convertDateRange(date_range);
       var indexOfStart = dateHelper.getDaysFromToday(dateRange.startDate);
       indexOfStart = indexOfStart >= 0 ? indexOfStart : 0;
@@ -43,7 +44,16 @@ exports.PowderHunter = functions.https.onRequest((request, response) => {
   }
 
   function nextBigSnow (app) {
-    app.tell('Im not quite ready for that one');
+    var snow = require('snow-forecast-sfr');
+    let resort_name = app.getArgument('resort_name');
+    var reportParseHelper = new ReportParseHelper();
+    var responseHelper = new ResponseHelper();
+    snow.parseResort(resort_name, 'top', function(result) {
+      var snowiestDay = reportParseHelper.findIndexOfMaxValue(result.forecast, 'snow');
+      var snowAmount = result.forecast[snowiestDay].snow;
+
+      app.tell(resort_name + 'will be getting ' + snowAmount + ' inches of snow ' + responseHelper.getDayPhrase(snowiestDay) + '. That looks like the best day to shred this week.');
+    });
   }
 
   // d. build an action map, which maps intent names to functions
