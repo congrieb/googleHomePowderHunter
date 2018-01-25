@@ -19,6 +19,7 @@ exports.PowderHunter = functions.https.onRequest((request, response) => {
     var snow = require('snow-forecast-sfr');
     var dateHelper = new DateHelper();
     var responseHelper = new ResponseHelper();
+    var reportParseHelper = new ReportParseHelper();
     let resort_name = app.getArgument('resort_name');
     let day_specific = app.getArgument('date');
     let date_range = app.getArgument('date-period');
@@ -36,8 +37,9 @@ exports.PowderHunter = functions.https.onRequest((request, response) => {
       indexOfStart = indexOfStart >= 0 ? indexOfStart : 0;
       var indexOfEnd = dateHelper.getDaysFromToday(dateRange.endDate);
       var snowAmount = 0;
+      var dailyForecast = reportParseHelper.makeReportDaily(result.forecast);
       for(var i = indexOfStart; i <= indexOfEnd; i++) {
-        snowAmount += result.forecast[i].snow;
+        snowAmount += dailyForecast[i].snow;
       }
       app.tell('Looks like there will be ' + snowAmount + ' inches of snow at ' + result.name + ' ' + (request.body.result.contexts[0].parameters['date-period.original'] || responseHelper.getDayPhrase(indexOfStart)));
     });
@@ -49,8 +51,9 @@ exports.PowderHunter = functions.https.onRequest((request, response) => {
     var reportParseHelper = new ReportParseHelper();
     var responseHelper = new ResponseHelper();
     snow.parseResort(resort_name, 'top', function(result) {
-      var snowiestDay = reportParseHelper.findIndexOfMaxValue(result.forecast, 'snow');
-      var snowAmount = result.forecast[snowiestDay].snow;
+      var dailyForecast = reportParseHelper.makeReportDaily(result.forecast);
+      var snowiestDay = reportParseHelper.findIndexOfMaxValue(dailyForecast, 'snow');
+      var snowAmount = dailyForecast[snowiestDay].snow;
 
       app.tell(resort_name + 'will be getting ' + snowAmount + ' inches of snow ' + responseHelper.getDayPhrase(snowiestDay) + '. That looks like the best day to shred this week.');
     });

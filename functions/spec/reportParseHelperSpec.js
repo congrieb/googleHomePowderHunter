@@ -38,5 +38,23 @@ describe('reportParseHelper', function test(){
             expect(snowiestDay).toEqual(-1);
         })
     });
+
+    describe('makeReportDaily', function test() {
+        it('should combine any reports from the same date into one array entry', function test(){
+            var forecast = [{date: '12/21/1987', snow: 1}, {date: '12/21/1987', snow: 2}, {date: '12/21/1987', snow: 3}, {date: '12/22/1987', snow: 3}];
+
+            var result = reportParseHelper.makeReportDaily(forecast);
+
+            expect(result.length).toEqual(2);
+        });
+
+        it('should sum the snow for all entries with the same date', function test(){
+            var forecast = [{date: '12/21/1987', snow: 1}, {date: '12/21/1987', snow: 2}, {date: '12/21/1987', snow: 3}];
+
+            var result = reportParseHelper.makeReportDaily(forecast);
+
+            expect(result[0].snow).toEqual(6);
+        });
+    })
     
 });

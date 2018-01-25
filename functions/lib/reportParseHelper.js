@@ -17,4 +17,18 @@ ReportParseHelper.prototype.findIndexOfMaxValue = function(array, key) {
     return maxIndex;
 };
 
+ReportParseHelper.prototype.makeReportDaily = function(forecast) {
+    var dailyForecast = [];
+    for(var i = 0; i < forecast.length; i++) {
+        if(i === 0 ) {
+            dailyForecast.push(forecast[i]);
+        } else if( dailyForecast[dailyForecast.length - 1].date === forecast[i].date) {
+            dailyForecast[dailyForecast.length - 1].snow += forecast[i].snow;
+        } else {
+            dailyForecast.push(forecast[i]);
+        }
+    }
+    return dailyForecast;
+}
+
 module.exports = ReportParseHelper;
