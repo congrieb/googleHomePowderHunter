@@ -55,7 +55,7 @@ exports.PowderHunter = functions.https.onRequest((request, response) => {
       var snowiestDay = reportParseHelper.findIndexOfMaxValue(dailyForecast, 'snow');
       var snowAmount = dailyForecast[snowiestDay].snow;
 
-      app.tell(resort_name + 'will be getting ' + snowAmount + ' inches of snow ' + responseHelper.getDayPhrase(snowiestDay) + '. That looks like the best day to shred this week.');
+      app.tell(resort_name + ' will be getting ' + snowAmount + ' inches of snow ' + responseHelper.getDayPhrase(snowiestDay) + '. That looks like the best day to shred this week.');
     });
   }
 
